@@ -9,8 +9,12 @@ import web.service.UserService;
 
 @Controller
 public class UserController {
-    @Autowired
+
     UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/users")
     public String usersList(ModelMap model) {

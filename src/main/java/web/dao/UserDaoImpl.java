@@ -9,12 +9,12 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-@Transactional
 public class UserDaoImpl implements UserDao {
 
     @PersistenceContext
     EntityManager entityManager;
 
+    @Transactional
     @Override
     public void add(User user) {
         entityManager.persist(user);
@@ -25,19 +25,20 @@ public class UserDaoImpl implements UserDao {
         return entityManager.find(User.class, id);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public List<User> getList() {
         return entityManager.createQuery("from User").getResultList();
     }
 
+    @Transactional
     @Override
     public void update(User user) {
         entityManager.merge(user);
     }
 
+    @Transactional
     @Override
     public void delete(User user) {
-        entityManager.remove(user);
+        entityManager.remove(entityManager.contains(user) ? user : entityManager.merge(user));
     }
 }
