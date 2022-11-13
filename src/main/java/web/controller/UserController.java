@@ -18,27 +18,27 @@ public class UserController {
         return "users";
     }
 
-    @GetMapping("/user-form")
-    public String userForm(ModelMap model, @ModelAttribute User user) {
-        model.addAttribute("user", user);
+    @GetMapping("/user-add")
+    public String userAdd(ModelMap model) {
+        model.addAttribute("user", new User());
         return "user-form";
     }
 
     @PostMapping("/user-add")
     public String saveUser(@ModelAttribute User user) {
-        userService.add(user);
-        return "redirect:/users";
-    }
-
-    @PostMapping("/user-update")
-    public String updateUser(@ModelAttribute User user) {
         userService.update(user);
         return "redirect:/users";
     }
 
-    @DeleteMapping("/user-delete")
-    public String deleteUser(@ModelAttribute User user) {
-        userService.delete(user);
+    @GetMapping("/user-update/{id}")
+    public String updateUser(ModelMap model, @PathVariable Long id) {
+        model.addAttribute("user", userService.get(id));
+        return "user-form";
+    }
+
+    @DeleteMapping("/user-delete/{id}")
+    public String deleteUser(@PathVariable Long id) {
+        userService.delete(userService.get(id));
         return "redirect:/users";
     }
 }
